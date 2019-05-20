@@ -3,11 +3,15 @@ package com.dethdemonaexemple.sunriseapp;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         datePicker=findViewById(R.id.datePicker);
         presenter=Presenter.getPresenter(this);
         presenter.registerGps();
+        enableLocation();
         initiate();
         registerBroad();
 
@@ -110,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickerCurrent(View v){
+        presenter.registerGps();
         String date=datePicker.getYear()+"-"+(datePicker.getMonth()+1)+"-"+datePicker.getDayOfMonth();
         presenter.newData(latitude,longitude,date);
     }
@@ -119,4 +125,46 @@ public class MainActivity extends AppCompatActivity {
     startActivity(intent);
     finish();
     }
+
+
+
+   void enableLocation(){
+        if (isLocationServiceEnabled()) {
+            //DO what you need...
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Seems Like location service is off,   Enable this to show map")
+                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivity(intent);
+                        }
+                    }).setNegativeButton("NO THANKS", null).create().show();
+
+        }}
+
+
+
+
+public boolean isLocationServiceEnabled(){
+        LocationManager locationManager = null;
+        boolean gps_enabled= false,network_enabled = false;
+
+        if(locationManager ==null)
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        try{
+        gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        }catch(Exception ex){
+        //do nothing...
+        }
+
+        try{
+        network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        }catch(Exception ex){
+        //do nothing...
+        }
+
+        return gps_enabled || network_enabled;
+}
 }

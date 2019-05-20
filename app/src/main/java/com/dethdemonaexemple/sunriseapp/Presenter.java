@@ -40,7 +40,7 @@ public class Presenter implements LocationListener {
 void registerGps(){
     try{gps.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         agps.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);}
-    catch (Exception e){}
+    catch (Exception e){Log.d("MyLog","Catch");}
 }
     public static Presenter getPresenter(Context context) {
         if (presenter == null) {
@@ -62,12 +62,13 @@ void registerGps(){
                             Intent intent = new Intent(context.getString(R.string.receiver));
                             intent.putExtra("result", context.getString(R.string.new_data));
                             intent.putExtra("data", myResponse);
+
                             context.sendBroadcast(intent);
 
 
                         } else {
                             if (response.body() == null) {
-                                Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();Log.d("MyLog",latitude+" "+longitude);
                             } else {
                                 switch (response.code()) {
                                     case 404:
