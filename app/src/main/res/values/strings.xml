@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Sunrise App</string>
+    <string name="receiver">com.dethdemonaexemple.sunriseapp</string>
+    <string name="new_data">successful</string>
+    <string name="map_api_key">AIzaSyDBcxcCRdLRLY62HLXTVX6bJUEmGXvdwH0</string>
+    <string name="formatted">0</string>
+</resources>
